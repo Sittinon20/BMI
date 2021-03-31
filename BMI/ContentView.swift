@@ -24,11 +24,15 @@ struct ContentView: View {
             }else if (notice == "สูงกว่าเกณฑ์") {
                 Text(notice)
                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                    .foregroundColor(.red)
-            }else {
+                    .foregroundColor(.yellow)
+            }else if (notice == "มาตรฐาน") {
                 Text(notice)
                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                     .foregroundColor(.green)
+            }else {
+                Text(notice)
+                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    .foregroundColor(.red)
             }
             
             VStack {
@@ -40,7 +44,7 @@ struct ContentView: View {
                 }else if (notice == "สูงกว่าเกณฑ์") {
                     Text(result)
                         .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                        .foregroundColor(.red)
+                        .foregroundColor(.yellow)
                 }else if (notice == "มาตรฐาน") {
                     Text(result)
                         .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
@@ -61,16 +65,23 @@ struct ContentView: View {
                 }.padding()
                 
                 Button(action: {
+                    if weight.isEmpty || height.isEmpty {
+                        self.weight = "0"
+                        self.height = "0"
+                    }
                     let resultcal = Double(self.weight)! / pow(Double(self.height)! / 100.0, 2)
                     self.result = String(resultcal)
                     
-                    if (resultcal <= 18.5) {
+                    if (resultcal <= 18.5 && resultcal > 0) {
                         self.notice = "ต่ำกว่าเกณฑ์"
                     }else if (resultcal >= 25) {
                         self.notice = "สูงกว่าเกณฑ์"
-                    }else {
+                    }else if (resultcal > 18.5 && resultcal < 25){
                         self.notice = "มาตรฐาน"
+                    }else {
+                        self.notice = "Error"
                     }
+                    
                     
                 }) {
                     Text("คำนวณ")
@@ -83,5 +94,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .statusBar(hidden: false)
+        
     }
 }
